@@ -1,350 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Experiment 1</title>
+<html>
+<head>
+	<!-- Add CSS at the head of HTML file -->
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
     />
-    <style>
-      /* Add a black background color to the top navigation */
-      .topnav {
-        background-color: #333;
-        overflow: hidden;
-        width: 100vw;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-      }
-
-      /* Style the links inside the navigation bar */
-      .topnav a {
-        float: left;
-        color: #f2f2f2;
-        text-align: center;
-        padding: 20px 30px;
-        text-decoration: none;
-        font-size: 17px;
-      }
-
-      .topnav span {
-        font-size: x-large;
-        position: relative;
-        left: 0;
-        float: left;
-        color: #f2f2f2;
-        text-align: center;
-        padding: 14px 30px;
-      }
-
-      /* Change the color of links on hover */
-      .topnav a:hover {
-        background-color: #ddd;
-        color: black;
-      }
-
-      /* Add a color to the active/current link */
-      .topnav a.active {
-        background-color: #04aa6d;
-        color: white;
-      }
-
-      #chart_div {
-        width: 100vw;
-        height: 80vh;
-      }
-
-      #table_div {
-        display: none;
-        font-size: x-large;
-        margin: 5px;
-        height: 80vh;
-      }
-
-      body {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-    </style>
-    <script>
-      let data;
-      let options;
-      let chart;
-      let chartId;
-      let rho;
-      let av_cust_s;
-      let av_cust_q;
-      let time;
-      let cust;
-      let ar;
-      let sr;
-      let av_time_s;
-      let cust_total;
-      let av_st;
-
-      class QElement {
-        constructor(element, priority) {
-          this.element = element;
-          this.priority = priority;
-        }
-      }
-
-      // PriorityQueue class
-      class PriorityQueue {
-        // An array is used to implement priority
-        constructor() {
-          this.items = [];
-        }
-
-        // functions to be implemented
-        enqueue(element, priority) {
-          var qElement = new QElement(element, priority);
-          var contain = false;
-
-          // iterating through the entire
-          // item array to add element at the
-          // correct location of the Queue
-          for (var i = 0; i < this.items.length; i++) {
-            if (this.items[i].priority > qElement.priority) {
-              // Once the correct location is found it is
-              // enqueued
-              this.items.splice(i, 0, qElement);
-              contain = true;
-              break;
-            }
-          }
-
-          // if the element have the highest priority
-          // it is added at the end of the queue
-          if (!contain) {
-            this.items.push(qElement);
-          }
-        }
-        dequeue() {
-          if (this.isEmpty()) return ;
-          return this.items.shift();
-        }
-        front() {
-          if (this.isEmpty()) return;
-          return this.items[0].priority;
-        }
-        isEmpty() {
-            return this.items.length == 0;
-        }
-
-        size() {
-            return this.items.length;
-        }
-        // printPQueue()
-      }
-
-      window.onload = function () {
-        google.charts.load("current", {
-          packages: ["corechart"],
-        });
-
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-          data = google.visualization.arrayToDataTable([
-            ["Time", "Customers"],
-            [0, 0],
-          ]);
-
-          options = {
-            title: "No. of Customers in System vs Time",
-            width: "100%",
-            height: "100%",
-            hAxis: {
-              title: "Time",
-            },
-            vAxis: {
-              title: "Customers",
-            },
-            chartArea: { width: "80%", height: "80%" },
-            legend: { position: "bottom" },
-          };
-
-          chart = new google.visualization.LineChart(
-            document.getElementById("chart_div")
-          );
-
-          chart.draw(data, options);
-        }
-      };
-
-      function check(a, b) {
-        if (a == "" || b == "") {
-          alert("Values cannot be empty");
-          return false;
-        }
-        if (parseFloat(a) <= 0) {
-          alert("Arrival rate should be positive");
-          return false;
-        }
-        if (parseFloat(b) <= 0) {
-          alert("Service rate should be positive");
-          return false;
-        }
-        return true;
-      }
-
-      function startSimulation(arrival_rate, service_rate, speed) {
-        let valid = check(arrival_rate, service_rate);
-        if (!valid) return;
-        clearChart();
-        console.log(arrival_rate);
-        console.log(service_rate);
-        let sTime = 0;
-        let in_use = false;
-        if (!arrival_rate) arrival_rate = 1.0;
-        if (!service_rate) service_rate = 1.0;
-        rho = arrival_rate / service_rate;
-        ar = arrival_rate;
-        sr = service_rate;
-        let U = Math.random();
-        let nextTime = -Math.log(U) / ar;
-        let aq = new PriorityQueue();
-        let sq = new PriorityQueue();
-        cust_total = 0;
-        aq.enqueue(1, nextTime);
-        chartId = setInterval(function () {
-          if (!sq.isEmpty() && ((sq.front() < aq.front()) || aq.isEmpty())) {
-            time = sq.front();
-            data.addRow([time, sq.size() - 1]);
-            sq.dequeue();
-            cust_total++;
-          } else {
-            U = Math.random();
-            time = aq.front();
-            aq.dequeue();
-            data.addRow([time, sq.size() + 1]);
-            nextTime = time - Math.log(U)/sr;
-            sq.enqueue(1, nextTime);
-            av_cust_s += nextTime - time;
-            av_st += nextTime - time;
-            av_time_s += nextTime - time;
-            U = Math.random();
-            nextTime = time - Math.log(U)/ar;
-            aq.enqueue(1, nextTime);
-          }
-          chart.draw(data, options);
-        }, 2010 - speed);
-      }
-
-      function drawTable() {
-        document.getElementById("table_div").style.width = "40vw";
-        document.getElementById("chart_div").style.width = "40vw";
-        chart.draw(data, options);
-        document.getElementById("table_div").style.display = "block";
-        let th_cs = rho;
-        let ex_cs = av_cust_s / time;
-        let th_cq = 0.0;
-        let ex_cq = 0.0;
-        let ex_st = av_st / (cust_total);
-        let th_ts = 1 / sr;
-        let ex_ts = av_time_s / cust_total;
-        let th_st = 1 / sr;
-        if (ar >= sr) {
-          document.getElementById("th_cs").innerHTML =
-            "Steady state solution does not exist";
-          document.getElementById("ex_cs").innerHTML =
-            ex_cs >= 0 && ex_cs != NaN
-              ? ex_cs.toFixed(2)
-              : "Unable to calculate results";
-          document.getElementById("th_cq").innerHTML =
-            "Steady state solution does not exist";
-          document.getElementById("ex_cq").innerHTML =
-            ex_cq >= 0 && ex_cq != NaN
-              ? ex_cq.toFixed(2)
-              : "Unable to calculate results";
-          document.getElementById("th_ts").innerHTML =
-            "Steady state solution does not exist";
-          document.getElementById("ex_ts").innerHTML =
-            ex_ts >= 0 && ex_ts != NaN
-              ? ex_ts.toFixed(2)
-              : "Unable to calculate results";
-          document.getElementById("th_st").innerHTML =
-            "Steady state solution does not exist";
-          document.getElementById("ex_st").innerHTML =
-            ex_st >= 0 && ex_st != NaN
-              ? ex_st.toFixed(2)
-              : "Unable to calculate results";
-          document.getElementById("ex").innerHTML =
-            "Experimental (" +
-            (time.toFixed(2) >= 0
-              ? time.toFixed(2)
-              : "Time for simulation cannot be generated for given inputs") +
-            ")";
-        } else {
-          document.getElementById("th_cs").innerHTML =
-            th_cs >= 0 && th_cs != NaN
-              ? th_cs.toFixed(2)
-              : "Unable to calculate results";
-          document.getElementById("ex_cs").innerHTML =
-            ex_cs >= 0 && ex_cs != NaN
-              ? ex_cs.toFixed(2)
-              : "Unable to calculate results";
-          document.getElementById("th_cq").innerHTML =
-            th_cq >= 0 && th_cq != NaN
-              ? th_cq.toFixed(2)
-              : "Unable to calculate results";
-          document.getElementById("ex_cq").innerHTML =
-            ex_cq >= 0 && ex_cq != NaN
-              ? ex_cq.toFixed(2)
-              : "Unable to calculate results";
-          document.getElementById("th_ts").innerHTML =
-            th_ts >= 0 && th_ts != NaN
-              ? th_ts.toFixed(2)
-              : "Unable to calculate results";
-          document.getElementById("ex_ts").innerHTML =
-            ex_ts >= 0 && ex_ts != NaN
-              ? ex_ts.toFixed(2)
-              : "Unable to calculate results";
-          document.getElementById("th_st").innerHTML =
-            th_st >= 0 && th_st != NaN
-              ? th_st.toFixed(2)
-              : "Unable to calculate results";
-          document.getElementById("ex_st").innerHTML =
-            ex_st >= 0 && ex_st != NaN
-              ? ex_st.toFixed(2)
-              : "Unable to calculate results";
-          document.getElementById("ex").innerHTML =
-            "Experimental (" +
-            (time.toFixed(2) >= 0
-              ? time.toFixed(2)
-              : "Time for simulation cannot be generated for given inputs") +
-            ")";
-        }
-      }
-
-      function stopSimulation() {
-        clearInterval(chartId);
-        drawTable();
-      }
-
-      function clearChart() {
-        document.getElementById("table_div").style.display = "none";
-        document.getElementById("chart_div").style.width = "100vw";
-        if (chartId) clearInterval(chartId);
-        data = google.visualization.arrayToDataTable([
-          ["Time", "Customers"],
-          [0, 0],
-        ]);
-        chart.draw(data, options);
-        cust = 0;
-        time = 0;
-        av_cust_q = 0;
-        av_cust_s = 0;
-        av_time_s = 0;
-        cust_total = 0;
-        av_st = 0;
-      }
-    </script>
-  </head>
+    
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rokkitt:wght@600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Exo:ital@1&display=swap" rel="stylesheet">
+</head>
 
   <body>
     <div class="topnav">
@@ -355,77 +21,110 @@
       <a href="mm1n.html">M/M/1/N</a>
       <a href="mmcn.html">M/M/c/N</a>
       <a href="mg1.html">M/G/1</a>
-      <a href="mg1n.html">M/G/1/N</a>
-      <a href="g1m1n.html">G1/M/1/N</a>
-      <a href="g1g1n.html">G1/G/1/N</a>
-      <a class="active" href="#">G/G/1/N</a>
+      <a href ="mg1n.html">M/G/1/N</a>
+      <a href ="mgcn.html">M/G/c/N</a>
+      <a href="gm1.html">GI/M/1</a>
+      <a class="active" href="#">GI/M/1/N</a>
+      <a href ="gmcn.html">GI/M/c/N</a>
+
     </div>
-    <div
-      style="
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-      "
-    >
-      <h2>Experiment 1</h2>
+    <div class="form-group" style="border: 0.5px solid rgb(98, 98, 98);
+    border-radius: 16px;
+    background: #37474F;
+    margin: 10px;
+    padding: 35px;
+    height: fit-content;
+    width: 500px;
+    box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.5);">
+
+<div style="
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin-bottom: 2em;
+      color: aliceblue;
+      ">
+  <h1 style="font-family: 'Rokkitt', serif;">GI/M/1/N</h1>
+</div>
+
+        <label for="ad">Arrival Time Distribution:</label>
+        <select name="ad" id="ad" onchange='checkDistribution(this.value);' style="color: black;">
+          <option value="free">Select</option>
+          <option value="Exponential">Exponential</option>
+          <option value="Deterministic">Deterministic</option>
+          <option value="Uniform">Uniform</option>
+        </select>
+        <br>
+        <label for="par1">Parameters:</label>
+        <input
+          class="form-control"
+          type="number"
+          id="par1"
+          name="parameters"
+          step="0.01"
+          min="0.00"
+        />
+        <br>
+        <input
+          class="form-control"
+          type="number"
+          id="par2"
+          name="parameters"
+          step="0.01"
+          min="0.00"
+          style='display:none;'
+        />
+        <br />
+
+        <label for="sd">Mean Service Rate:</label>
+        <br>
+          <input
+          class="form-control"
+          type="number"
+          id="sr"
+          step="0.01"
+          min="0.00"
+        />
+        <br />
+
+        <label for="q_size">Maximum customers in the System:</label>
+        <input
+          class="form-control"
+          type="number"
+          id="q_size"
+          name="parameters"
+          step="1"
+          min="1"
+        />
+        <br />
+
+        <div style="margin-top: 50px; display: flex; flex-direction: row; justify-content: center; align-items: center;">
+        <button
+          id="start"
+          onclick="startSimulationBasedOnDistribution()"
+          class="button-30" id="start_btn" role="button" style="margin-right: 2em; background-color: #02a4d3;"> Start </button>
+
+        <button onclick="stopSimulation()" class="button-30" id="stop_btn" role="button" style="margin-right: 2em; background-color: #fc5753;">Stop</button>
+        <button onclick="clearChart()" class="button-30" id="clear_btn" role="button" style="background-color: #fdbb40;">Clear</button>
+      </div>
     </div>
-    <div
-      class="form-group"
-      style="border: 1px solid black; margin: 10px; padding: 15px; width: 400px"
-    >
-      <label for="ar">Mean Arrival Rate:</label>
-      <input
-        class="form-control"
-        type="number"
-        id="ar"
-        step="0.01"
-        min="0.00"
-      />
-      <br />
-      <label for="sr">Mean Service Rate:</label>
-      <input
-        class="form-control"
-        type="number"
-        id="sr"
-        step="0.01"
-        min="0.00"
-      />
-      <br />
-      <label for="slider" class="form-label">Simulation speed: </label>
-      <input
-        type="range"
-        class="form-range"
-        id="slider"
-        min="10"
-        max="2000"
-        value="1000"
-      />
-    </div>
-    <div style="margin-top: 50px">
-      <button
-        onclick="startSimulation(document.getElementById('ar').value, document.getElementById('sr').value, document.getElementById('slider').value)"
-        class="btn btn-primary"
-      >
-        Start
-      </button>
-      <button onclick="stopSimulation()" class="btn btn-primary">Stop</button>
-      <button onclick="clearChart()" class="btn btn-primary">Clear</button>
-    </div>
+
     <div style="display: flex; flex-direction: row">
       <div id="chart_div"></div>
       <div class="table-responsive" id="table_div">
         <table
-          class="table table-striped text-successtable-border border-light"
+            class="styled-table"
         >
-          <thead class="border-light">
+            <thead class="border-light">
             <tr>
-              <th scope="col"></th>
-              <th scope="col"><strong>Theoretical</strong></th>
-              <th scope="col"><strong id="ex"></strong></th>
+                <th scope="col" width = "30%" style="text-align: center;"><strong id="params"></strong></th>
+                <th scope="col" width = "30%" style="text-align: center;"><strong>Steady State Results</strong></th>
+                <!-- <th scope="col"><strong>Time-dependent Results</strong></th> -->
+                <th scope="col" width = "30%" style="text-align: center;"><strong id="ex"></strong></th>
             </tr>
-          </thead>
-          <tbody>
+            </thead>
+            <tbody>
             <tr>
               <th scope="row">Avg. No. of Customers in System</th>
               <td id="th_cs"></td>
@@ -442,17 +141,65 @@
               <td id="ex_ts"></td>
             </tr>
             <tr>
-              <th scope="row">Avg. Service Time</th>
-              <td id="th_st"></td>
-              <td id="ex_st"></td>
+              <th scope="row">Avg. Time Spent in the Queue</th>
+              <td id="th_qt"></td>
+              <td id="ex_qt"></td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <script
-      type="text/javascript"
-      src="https://www.gstatic.com/charts/loader.js"
-    ></script>
+
+    
+    <div id='template' style='display:none;'>
+      <div class="vert_bar">
+          <span class="sim_history_title">
+            #SectionTitle# <!--Padding is optional-->
+          </span>
+        </div>
+      <div style="display: flex; flex-direction: row">
+          <div name="chart_div_tmp"></div>
+          <div class="table-responsive" name="table_div_tmp">
+          <table class="styled-table">
+              <thead class="border-light">
+              <tr>
+                  <th scope="col" width = "30%" style="text-align: center;"><strong name="params">#params#</strong></th>
+                  <th scope="col" width = "30%" style="text-align: center;"><strong>Steady State Results</strong></th>
+                  <!-- <th scope="col"><strong>Time-dependent Results</strong></th> -->
+                  <th scope="col" width = "30%" style="text-align: center;"><strong name="ex_tmp">#exp_time#</strong></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                  <th scope="row">Avg. No. of Customers in the System</th>
+                  <td name="th_cs_tmp">#th_cs_tmp#</td>
+                  <td name="ex_cs_tmp">#ex_cs_tmp#</td>
+              </tr>
+              <tr>
+                  <th scope="row">Avg. No. of Customers in the Queue</th>
+                  <td name="th_cq_tmp">#th_cq_tmp#</td>
+                  <td name="ex_cq_tmp">#ex_cq_tmp#</td>
+              </tr>
+              <tr>
+                  <th scope="row">Avg. Time Spent in the System</th>
+                  <td name="th_ts_tmp">#th_ts_tmp#</td>
+                  <td name="ex_ts_tmp">#ex_ts_tmp#</td>
+              </tr>
+              <tr>
+                  <th scope="row">Avg. Service Time</th>
+                  <td name="th_qt_tmp">#th_qt_tmp#</td>
+                  <td name="ex_qt_tmp">#ex_qt_tmp#</td>
+              </tr>
+              </tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+      <div id="results"></div>
+      
+	<!-- Add JS at the bottom of HTML file -->
+    <script src="./js/main.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
   </body>
 </html>
