@@ -2,38 +2,72 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "This is a Sample Question 1?",
+      "question": "What distinguishes the arrival process in a GI/M/1/N queueing system?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "Deterministic arrival pattern",
+        "b": "Poisson arrival process",
+        "c": "Exponential inter-arrival times",
+        "d": "General probability distribution for arrivals"
       },
       "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+        "a": "Incorrect. A deterministic arrival pattern implies arrivals occur at fixed intervals, which is not characteristic of a GI/M/1/N queueing system.",
+        "b": "Incorrect. A Poisson arrival process assumes arrivals occur randomly over time at a constant average rate, which does not align with the general distributed arrivals of a GI/M/1/N system.",
+        "c": "Incorrect. Exponential inter-arrival times are typical in M/M/1/N queueing systems, not in GI/M/1/N systems, which allow for more general probability distributions for arrivals.",
+        "d": "Correct. The arrival process in a GI/M/1/N queueing system is characterized by a general probability distribution, allowing for a wide range of arrival patterns and behaviors."
       },
-      "correctAnswer": "a",
-      "difficulty": "beginner"
+      "correctAnswer": "d",
+      "difficulty": "intermediate"
     },
     {
-      "question": "This is a Sample Question 2?",
+      "question": "What is the significance of the 'N' parameter in the GI/M/1/N queueing system?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "Mean service rate",
+        "b": "Maximum number of customers the system can accommodate",
+        "c": "Markovian arrival pattern",
+        "d": "Memoryless service time"
       },
       "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+        "a": "Incorrect. The 'N' parameter does not represent the mean service rate but rather the maximum number of customers allowed in the system at any given time.",
+        "b": "Correct. In the GI/M/1/N queueing system, the 'N' parameter signifies the maximum number of customers the system can accommodate simultaneously before new arrivals are rejected.",
+        "c": "Incorrect. The 'N' parameter is related to system capacity and does not directly involve arrival patterns.",
+        "d": "Incorrect. Memoryless service time is a characteristic of exponential service, not directly related to the 'N' parameter."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "What happens if the number of customers in the system exceeds the 'N' parameter in a GI/M/1/N queueing system?",
+      "answers": {
+        "a": "Additional servers are added to handle the overflow",
+        "b": "Excess customers are served immediately",
+        "c": "New arrivals are rejected, resulting in system overflow",
+        "d": "Service times increase exponentially"
+      },
+      "explanations": {
+        "a": "Incorrect. Adding additional servers is not a typical action in a GI/M/1/N queueing system when the maximum system capacity is reached.",
+        "b": "Incorrect. Serving excess customers immediately would violate the system's capacity limit and potentially lead to instability.",
+        "c": "Correct. When the number of customers in the system exceeds the 'N' parameter, new arrivals are rejected, leading to system overflow.",
+        "d": "Incorrect. Service times are not directly affected by exceeding the system capacity but rather by the service rate distribution."
       },
       "correctAnswer": "c",
-      "difficulty": "beginner"
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "How does the 'M' parameter differ from the 'N' parameter in the GI/M/1/N queueing system?",
+      "answers": {
+        "a": "M represents the number of service stages, while N represents the number of servers",
+        "b": "M represents the service rate, while N represents the maximum number of customers",
+        "c": "M represents the arrival rate, while N represents the number of servers",
+        "d": "M represents the service time distribution is Markovian, while N represents the maximum number of customers"
+      },
+      "explanations": {
+        "a": "Incorrect. Both 'M' and 'N' parameters are related to system capacity, but 'M' specifically refers to the maximum number of customers the system can hold, while 'N' represents the maximum number of customers allowed in the system at any given time.",
+        "b": "Incorrect. While 'M' and 'N' both relate to system capacity, 'M' refers to the maximum number of customers the system can hold, and 'N' represents the maximum number of customers allowed in the system at any given time.",
+        "c": "Incorrect. 'M' and 'N' both pertain to system capacity, but 'M' specifically denotes the maximum number of customers the system can hold, while 'N' represents the maximum number of customers allowed in the system at any given time.",
+        "d": "Correct. In the GI/M/1/N queueing system, 'M' represents the service time distribution is Markovian, while 'N' signifies the maximum number of customers allowed in the system at any given time."
+      },
+      "correctAnswer": "d",
+      "difficulty": "intermediate"
     }
   ]
 }
