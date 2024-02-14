@@ -23,13 +23,13 @@
       "answers": {
         "a": "Maximum number of customers",
         "b": "Mean arrival rate",
-        "c": "Service rate follows Markovian distribution",
+        "c": "Service time follows Markovian distribution",
         "d": "Maximum queue capacity"
       },
       "explanations": {
         "a": "Incorrect. 'M' does not represent the maximum number of customers in the GI/M/1/N model.",
         "b": "Incorrect. 'M' represents the mean arrival rate in the GI/M/1/N queueing model.",
-        "c": "Correct. 'M' represents the service rate follows Markovian distribution in the GI/M/1/N model.",
+        "c": "Correct. 'M' represents the service time follows Markovian distribution in the GI/M/1/N model.",
         "d": "Incorrect. 'M' does not represent the maximum queue capacity in the GI/M/1/N model."
       },
       "correctAnswer": "b",
