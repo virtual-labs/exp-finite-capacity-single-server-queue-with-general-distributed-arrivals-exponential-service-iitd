@@ -1,0 +1,90 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "What does 'GI/M/1/N' represent in the context of queueing theory?",
+      "answers": {
+        "a": "General Infinite/Multiple/Single server/Finite capacity",
+        "b": "General/Deterministic/Single server/Finite capacity",
+        "c": "General/Markovian/One/Infinite capacity",
+        "d": "General arrival distribution /Markovian service /Single server/Finite capacity"
+      },
+      "explanations": {
+        "a": "Incorrect. This option does not represent the correct notation for the GI/M/1/N queueing model.",
+        "b": "Incorrect. This option does not accurately represent the notation for the GI/M/1/N queueing model.",
+        "c": "Incorrect. This option does not accurately represent the notation for the GI/M/1/N queueing model.",
+        "d": "Correct. 'GI/M/1/N' represents General arrival distribution /Markovian service /Single server/Finite capacity in the context of queueing theory."
+      },
+      "correctAnswer": "d",
+      "difficulty": "medium"
+    },
+    {
+      "question": "In the GI/M/1/N queueing model, what does 'M' represent?",
+      "answers": {
+        "a": "Maximum number of customers",
+        "b": "Mean arrival rate",
+        "c": "Service time follows Markovian distribution",
+        "d": "Maximum queue capacity"
+      },
+      "explanations": {
+        "a": "Incorrect. 'M' does not represent the maximum number of customers in the GI/M/1/N model.",
+        "b": "Incorrect. 'M' represents the mean arrival rate in the GI/M/1/N queueing model.",
+        "c": "Correct. 'M' represents the service time follows Markovian distribution in the GI/M/1/N model.",
+        "d": "Incorrect. 'M' does not represent the maximum queue capacity in the GI/M/1/N model."
+      },
+      "correctAnswer": "b",
+      "difficulty": "medium"
+    },
+    {
+      "question": "In the GI/M/1/N queueing model, what does 'N' represent?",
+      "answers": {
+        "a": "Number of servers",
+        "b": "Number of arrivals",
+        "c": "Maximum queue capacity",
+        "d": "Mean service rate"
+      },
+      "explanations": {
+        "a": "Incorrect. 'N' does not represent the number of servers in the GI/M/1/N model.",
+        "b": "Incorrect. 'N' does not represent the number of arrivals in the GI/M/1/N model.",
+        "c": "Correct. 'N' represents the maximum queue capacity in the GI/M/1/N queueing model.",
+        "d": "Incorrect. 'N' does not represent the mean service rate in the GI/M/1/N model."
+      },
+      "correctAnswer": "c",
+      "difficulty": "medium"
+    },
+    {
+      "question": "What kind of distribution characterizes the arrival process in the GI/M/1/N queueing model?",
+      "answers": {
+        "a": "Uniform distribution",
+        "b": "Exponential distribution",
+        "c": "General distribution",
+        "d": "Normal distribution"
+      },
+      "explanations": {
+        "a": "Incorrect. Uniform distribution does not characterize the arrival process in the GI/M/1/N model.",
+        "b": "Incorrect. Exponential distribution does not characterize the arrival process in the GI/M/1/N model.",
+        "c": "Correct. General distribution characterizes the arrival process in the GI/M/1/N queueing model.",
+        "d": "Incorrect. Normal distribution does not characterize the arrival process in the GI/M/1/N model."
+      },
+      "correctAnswer": "c",
+      "difficulty": "medium"
+    },
+    {
+     "question": "What is the relationship between the mean arrival rate and mean service rate for the existence of a steady-state solution?",
+      "answers": {
+        "a": "Mean arrival rate = Mean service rate",
+        "b": "Mean arrival rate > Mean service rate",
+        "c": "Mean arrival rate < Mean service rate",
+        "d": "Mean service rate is independent of mean arrival rate for the existence of steady-state solution"
+      },
+      "explanations": {
+        "a": "For mean arrival rate equals to mean service rate, traffic intensity equals to 1, which leads an infinite number of customers in the system",
+        "b": "In this case, the system will collapse due to more arrival in comparison to service in a unit time",
+        "c": "This leads to steady-state solution as arrivals are less than service in a unit time",
+        "d": "In this case, the system will collapse due to more arrivals in comparison to service in a unit time when the arrival rate becomes greater than service rate"
+      },
+      "correctAnswer": "c",
+      "difficulty": "intermediate"
+    }
+  ]
+}

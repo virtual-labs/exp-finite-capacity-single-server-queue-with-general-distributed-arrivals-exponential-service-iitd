@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Add CSS at the head of HTML file -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rokkitt:wght@600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Exo:ital@1&display=swap" rel="stylesheet">
+</head>
+
+  <body>
+    <div class="topnav">
+  <!--<span>Virtual Lab</span>
+      <a href="index.html">M/M/1</a>
+      <a href="mminf.html">M/M/inf</a>
+      <a href="mmc.html">M/M/c</a>
+      <a href="mm1n.html">M/M/1/N</a>
+      <a href="mmcn.html">M/M/c/N</a>
+      <a href="mg1.html">M/G/1</a>
+      <a href ="mg1n.html">M/G/1/N</a>
+      <a href ="mgcn.html">M/G/c/N</a>
+      <a href="gm1.html">GI/M/1</a>
+      <a class="active" href="#">GI/M/1/N</a>
+      <a href ="gmcn.html">GI/M/c/N</a>-->
+
+    </div>
+    <div class="form-group" style="border: 0.5px solid rgb(98, 98, 98);
+    border-radius: 16px;
+    background: #37474F;
+    margin: 10px;
+    padding: 35px;
+    height: fit-content;
+    width: 500px;
+    box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.5);">
+
+<div style="
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin-bottom: 2em;
+      color: aliceblue;
+      ">
+  <h1 style="font-family: 'Rokkitt', serif;">GI/M/1/N</h1>
+</div>
+
+        <label for="ad">Arrival Time Distribution:</label>
+        <select name="ad" id="ad" onchange='checkDistribution(this.value);' style="color: black;">
+          <option value="free">Select</option>
+          <option value="Exponential">Exponential</option>
+          <option value="Deterministic">Deterministic</option>
+          <option value="Uniform">Uniform</option>
+        </select>
+        <br>
+        <label for="par1">Parameters:</label>
+        <input
+          class="form-control"
+          type="number"
+          id="par1"
+          name="parameters"
+          step="0.01"
+          min="0.00"
+        />
+        <br>
+        <input
+          class="form-control"
+          type="number"
+          id="par2"
+          name="parameters"
+          step="0.01"
+          min="0.00"
+          style='display:none;'
+        />
+        <br />
+
+        <label for="sd">Mean Service Rate:</label>
+        <br>
+          <input
+          class="form-control"
+          type="number"
+          id="sr"
+          step="0.01"
+          min="0.00"
+        />
+        <br />
+
+        <label for="q_size">Maximum customers in the System:</label>
+        <input
+          class="form-control"
+          type="number"
+          id="q_size"
+          name="parameters"
+          step="1"
+          min="1"
+        />
+        <br />
+
+        <div style="margin-top: 50px; display: flex; flex-direction: row; justify-content: center; align-items: center;">
+        <button
+          id="start"
+          onclick="startSimulationBasedOnDistribution()"
+          class="button-30" id="start_btn" role="button" style="margin-right: 2em; background-color: #02a4d3;"> Start </button>
+
+        <button onclick="stopSimulation()" class="button-30" id="stop_btn" role="button" style="margin-right: 2em; background-color: #fc5753;">Stop</button>
+        <button onclick="clearChart()" class="button-30" id="clear_btn" role="button" style="background-color: #fdbb40;">Clear</button>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: row">
+      <div id="chart_div"></div>
+      <div class="table-responsive" id="table_div">
+        <table
+            class="styled-table"
+        >
+            <thead class="border-light">
+            <tr>
+                <th scope="col" width = "30%" style="text-align: center;"><strong id="params"></strong></th>
+                <th scope="col" width = "30%" style="text-align: center;"><strong>Steady State Results</strong></th>
+                <!-- <th scope="col"><strong>Time-dependent Results</strong></th> -->
+                <th scope="col" width = "30%" style="text-align: center;"><strong id="ex"></strong></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <th scope="row">Avg. No. of Customers in System</th>
+              <td id="th_cs"></td>
+              <td id="ex_cs"></td>
+            </tr>
+            <tr>
+              <th scope="row">Avg. No. of Customers in Queue</th>
+              <td id="th_cq"></td>
+              <td id="ex_cq"></td>
+            </tr>
+            <tr>
+              <th scope="row">Avg. Time Spent in System</th>
+              <td id="th_ts"></td>
+              <td id="ex_ts"></td>
+            </tr>
+            <tr>
+              <th scope="row">Avg. Time Spent in the Queue</th>
+              <td id="th_qt"></td>
+              <td id="ex_qt"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    
+    <div id='template' style='display:none;'>
+      <div class="vert_bar">
+          <span class="sim_history_title">
+            #SectionTitle# <!--Padding is optional-->
+          </span>
+        </div>
+      <div style="display: flex; flex-direction: row">
+          <div name="chart_div_tmp"></div>
+          <div class="table-responsive" name="table_div_tmp">
+          <table class="styled-table">
+              <thead class="border-light">
+              <tr>
+                  <th scope="col" width = "30%" style="text-align: center;"><strong name="params">#params#</strong></th>
+                  <th scope="col" width = "30%" style="text-align: center;"><strong>Steady State Results</strong></th>
+                  <!-- <th scope="col"><strong>Time-dependent Results</strong></th> -->
+                  <th scope="col" width = "30%" style="text-align: center;"><strong name="ex_tmp">#exp_time#</strong></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                  <th scope="row">Avg. No. of Customers in the System</th>
+                  <td name="th_cs_tmp">#th_cs_tmp#</td>
+                  <td name="ex_cs_tmp">#ex_cs_tmp#</td>
+              </tr>
+              <tr>
+                  <th scope="row">Avg. No. of Customers in the Queue</th>
+                  <td name="th_cq_tmp">#th_cq_tmp#</td>
+                  <td name="ex_cq_tmp">#ex_cq_tmp#</td>
+              </tr>
+              <tr>
+                  <th scope="row">Avg. Time Spent in the System</th>
+                  <td name="th_ts_tmp">#th_ts_tmp#</td>
+                  <td name="ex_ts_tmp">#ex_ts_tmp#</td>
+              </tr>
+              <tr>
+                  <th scope="row">Avg. Service Time</th>
+                  <td name="th_qt_tmp">#th_qt_tmp#</td>
+                  <td name="ex_qt_tmp">#ex_qt_tmp#</td>
+              </tr>
+              </tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+      <div id="results"></div>
+      
+	<!-- Add JS at the bottom of HTML file -->
+    <script src="./js/main.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+  <script src="../assets/js/iframeResize.js"></script></body>
+</html>
