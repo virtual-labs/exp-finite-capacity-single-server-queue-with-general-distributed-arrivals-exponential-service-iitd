@@ -17,4 +17,4 @@ To conduct the experiment for the GI/M/1/N queueing model, follow these detailed
    - **View Results**: Examine the steady-state results provided by the simulation. These results will be available both numerically and graphically, showing metrics such as the average number of customers in the system, blocking probability, average waiting time, and server utilization.
 
 5. **Compare Theoretical and Experimental Results**:
-   - **Analyze the Data**: Compare the numerical and graphical results obtained from the simulation with the theoretical predictions of the \GI/M/1/N model. This comparison helps validate the theoretical model and provides insights into the system's performance under different conditions.
+   - **Analyze the Data**: Compare the numerical and graphical results obtained from the simulation with the theoretical predictions of the GI/M/1/N model. This comparison helps validate the theoretical model and provides insights into the system's performance under different conditions.
