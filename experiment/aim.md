@@ -1,1 +1,1 @@
-### Aim of the experiment
+#### The experiment aims to predict the behavior of systems that attempt to provide service for randomly arising demands through the GI/M/1/N model. More specifically, when the arrival time for an independent customer arriving in a system follows a general distribution with a single server and finite capacity, the average number of customers in the system, the average time spent in the system, the average number of customers in the queue, and the average time spent in the queue of a customer can be examined through the experiment.
